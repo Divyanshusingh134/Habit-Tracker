@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Schedule
+{% endblock %}
+
+{% block main %}
+    <div class= "container-fluid px-5">
+        <div class = "row" data-bs-theme="dark">
+            <div class = " col-12 col-lg-4 mb-4">
+                <div class = "shadow-sm border-0 sticky-top mb-5 card mt-4" style="top: 20px; z-index: 1;">
+                    <div class = "card-body p-4">
+                        <!-- Heading -->
+                        <h4 class = "habit-header text-center mb-2 fw-bold">Add Activity</h4>
+                        <!-- form -->
+                        <form action = "/myroutine" method = "post">
+                            <!-- For activity name  -->
+                            <div class = "mb-4">
+                                <label class = "col-form-label fw-bold" for = "habit">Activity: </label>
+                                <div class = "input-group">
+                                    <input class = "form-control" name = "activity_name" type = "text" required placeholder = "e.g.,  Study Algorithms" autocomplete= "off">
+                                    <select name = "linked-habit_id" class = "form-select">
+                                        <option value = "" selected>None</option>
+                                        {% for habit in habits %}
+                                            <option value = "{{habit.id}}">{{ habit.habit_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- timings -->
+                            <div class = "row mb-3">
+                                <div class = "col-6 ">
+                                    <label class = "form-label fw-bold" >Start: </label>
+                                    <input class = "form-control"  type = "time" name = "start" required>
+                                </div>
+                                <div class = "col-6 ">
+                                    <label class = "form-label fw-bold" >End: </label>
+                                    <input  class = "form-control" type = "time" name = "end" required >
+                                </div>
+                            </div>
+                            <!-- frequency -->
+
+                            <div class = "mb-1">
+                                <div class = "col-12">
+                                    <label class = "form-label text-secondary text-uppercase small d-block fw-bold mb-3" >Repeat On</label>
+                                    <div class = "d-flex justify-content-center gap-1">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="mon" id="mon">
+                                            <label class="form-check-label" for="mon">Mon</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="tue" id="tue">
+                                            <label class="form-check-label" for="tue">Tue</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="wed" id="wed">
+                                            <label class="form-check-label" for="wed">Wed</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="thu" id="thu">
+                                            <label class="form-check-label" for="thu">Thu</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="fri" id="fri">
+                                            <label class="form-check-label" for="fri">Fri</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="sat" id="sat">
+                                            <label class="form-check-label" for="sat">Sat</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="days" value="sun" id="sun">
+                                            <label class="form-check-label" for="sun">Sun</label>
+                                        </div>
+                                    </div>
+                                   <div class="d-flex justify-content-center mt-2">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="everyday">
+                                            <label class="form-check-label fw-bold" for="everyday">Everyday</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Button to submit  -->
+                            <div class = "d-grid">
+                                <button type = "submit" class = "btn btn-success btn-lg fw-bold">Add To Schedule</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--  Show schedule -->
+            <div class = "col-10 col-lg-6">
+                <div class = "d-flex justify-content-between align-items-center mb-4">
+                    <h3 class = "fw-bold m-0 habit-header">Your Schedule</h3>
+                    <span class = "badge bg-light text-dark border p-2">{{ schedule_items | length }} Activities</span>
+                </div>
+                <!-- If schedule is empty  -->
+                {% if not schedule_items %}
+                    <div class = "bg-light  text-center border p-5">
+                        <h4 class = "text-muted">No Activities Yet</h4>
+                        <p>Use the form on the left to build your routine.</p>
+                    </div>
+                {% endif %}
+                <div class = "row">
+                    <!-- show schedule  -->
+                    {% for item in schedule_items %}
+                    <div class = "col-12 mb-3">
+                        <div class = "card border shadow-sm">
+                            <div class = "card-body align-items-center d-flex">
+
+                                <div class = "text-center" style = "min-width: 80px;">
+                                    <div class = "fw-bold">
+                                        {{ item.start_time }} to {{ item.end_time }}
+                                    </div>
+                                </div>
+                                <div class="border-start border-3 border-primary h-100 me-3" style="height: 50px;"></div>
+
+                                <div class = " flex-grow-1">
+                                    <h5 class = "mb-1">{{ item.activity_name }}</h5>
+                                </div>
+                                <div class = "flex-grow-1 gap-1 ">
+                                    <div class = "d-flex justify-content-end gap-1 flex-wrap">
+                                        {% if item.monday %}
+                                            <span class = "badge bg-primary">MON</span>
+                                        {% endif %}
+                                        {% if item.tuesday %}
+                                            <span class = "badge bg-primary">TUE</span>
+                                        {% endif %}
+                                        {% if item.wednesday %}
+                                            <span class = "badge bg-primary">WED</span>
+                                        {% endif %}
+                                        {% if item.thursday %}
+                                            <span class = "badge bg-primary">THU</span>
+                                        {% endif %}
+                                        {% if item.friday %}
+                                            <span class = "badge bg-primary">FRI</span>
+                                        {% endif %}
+                                        {% if item.saturday %}
+                                            <span class = "badge bg-primary">SAT</span>
+                                        {% endif %}
+                                        {% if item.sunday %}
+                                            <span class = "badge bg-primary">SUN</span>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                                <div class = "rounded p-1">
+                                    <form action = "/update_schedule" method = "get">
+                                        <input type = "hidden" name = "id" value = {{ item.id }}>
+                                        <button class = "btn btn-secondary" type = "submit">Update</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const everyday = document.getElementById("everyday");
+            const days = document.querySelectorAll('input[name = "days"]');
+            everyday.addEventListener('change', function(){
+                days.forEach(function(checkbox){
+                    checkbox.checked = everyday.checked;
+                });
+            });
+        });
+
+    </script>
+{% endblock %}
