@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Customise
+{% endblock %}
+
+{% block main %}
+
+    <div class = "main-content-wrapper">
+
+        <div class = "container" data-bs-theme = "dark">
+            <div class = "row justify-content-center">
+                <div class = "col-md-10 col-lg-8">
+                    <div class = "habit-card shadow-sm border-0 mb-5 card">
+                        <div class = "habit-header text-center">
+                            <h2 class = "fw-bold mb-1"> Let's Customise Your Experience! </h2>
+                            <p class="mb-0 opacity-75" style="font-size: 0.9rem;">Setup your profile to get better insights</p>
+                        </div>
+
+                        <div class = "card shadow-sm border-0">
+                            <div class = "card-body p-4">
+                                <form action="/onboarding" method = "post">
+                                    <div class = "mb-4 rounded p-4 mint-box shadow-sm">
+                                        <div class = "row mb-3 align-items-center">
+                                            <label for="name" class = "col-md-3 col-form-label text-md-end fw-bold" >Name: </label>
+                                            <div class = "col-md-9">
+                                                <input type = "text" placeholder = "Your Name" autocomplete="off" class = "form-control" name = "name">
+                                            </div>
+                                        </div>
+
+                                        <div class = "row text-start mb-3">
+                                            <div class = "col-md-6">
+                                                <div class = "row align-items-center">
+                                                    <label for="height" class = "col-md-6 col-form-label text-md-end fw-bold">Height(cm): </label>
+                                                    <div class = "col-md-6">
+                                                        <input type = "number" placeholder = "Height" autocomplete="off" class = "form-control mx-auto w-auto" name = "height" maxlenght = "300">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class = "col-md-6">
+                                                <div class = "row align-item-center">
+                                                    <label for="weight" class = "col-md-6 col-form-label text-md-end fw-bold">Weight: </label>
+                                                    <div class = "col-md-6">
+                                                        <div class = "input-group">
+                                                            <input type = "number" placeholder = "Weight" autocomplete="off" class = "form-control mx-auto" name = "weight">
+                                                            <select id = "weight-unit" name = "weight-unit" class = "inline-flex items-center px-4 py-3">
+                                                                <option value = "lb" selected>lb</option>
+                                                                <option value = "kg">Kg</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-center mb-3">
+                                        What are Your Primary Goals?
+                                        <small class="text-muted fs-6">(Select Any)</small>
+                                    </h4>
+                                    <div class = "mb-4 text-start mx-auto" style="max-width: 400px;">
+                                        <div class = "mb-3 text-start">
+                                            {% for goal in goals %}
+                                                <div class = "form-check">
+                                                    <input class = "form-check-input" type = "checkbox" name = "goals" value = "{{goal.id}}" id = "goal_{{goal.id}}">
+                                                    <label class = "form-check-label" for = "goal_{{goal.id}}">{{goal.name}}</label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <button type="submit" class = "btn btn-success">Save and Continue</button>
+                                        <a href = "/" class = "btn btn-primary">Skip for now</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

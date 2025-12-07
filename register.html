@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class = "container">
+        <div class = " row justify-content-center">
+            <div class = "col-md-10 col-lg-8">
+                <div class = "shadow-sm border-0 mb-5 card mt-4">
+                    <div class = "card-body p-4">
+                        <h3 class = "habit-header fw-bold">Register</h3>
+                        <form action = "/register" method = "post">
+                        <!-- For Email -->
+                            <div class = "row align-items-center justify-content-center mt-4 mb-3">
+                                <label for="email" class = "col-form-label col-4 text-sm-end">Email Address: </label>
+                                <div class = "col-8">
+                                    <div class = "input-group">
+                                        <input type = "email" placeholder= "Email" autofocus autocomplete="off" class="form-control mx-auto w-auto" required name = "email_address">
+                                        <div class = "input-group-prepend">
+                                            <span class = "input-group-text">@example.com</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- For Username -->
+                            <div class = "row justify-content-center mb-3">
+                                <label for ="username" class = "col-4 text-sm-end col-form-label">Username:  </label>
+                                <div class ="col-8">
+                                    <div class = "input-group">
+                                         <div class = "input-group-append">
+                                            <span class = "input-group-text">@</span>
+                                        </div>
+                                        <input type = "text" placeholder="Username" autocomplete="off" required class = "form-control mx-auto w-auto" name = "username" >
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- for password -->
+                            <div class = "row justify-content-center mb-3">
+                                <label class = "col-4 text-sm-end col-form-label" for = "password">Password: </label>
+                                <div class = "col-8">
+                                    <div class = "input-group">
+                                        <input type = "password" placeholder="Password" name = "password" id  = "password" autocomplete="off" class = "form-control mx-auto w-auto"
+                                        minlength = "8" maxlength = "30" pattern= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\d@!$%*?&]{8,30})"
+                                        title = "Password must be 8-30 long , and must contains atleast one uppercase one lowercase and one digit" >
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- For confirm password -->
+                            <div class = "row justify-content-center mb-3">
+                                <label for ="confirmation" class = "col-sm-4 text-sm-end col-form-label">Confirm Password: </label>
+                                <div class = "col-8">
+                                    <div class = "input-group">
+                                        <input type = "password" name = "confirmation" placeholder="Confirm Password"  id = "confirmation" autocomplete="off" class = "form-control mx-auto w-auto">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- button  -->
+                            <div class = " row justify-content-center mb-3">
+                                <button class = "btn btn-success" type = "submit">Sign Up</button>
+                            </div>
+                        </form>
+                        <ul>
+                            <li class = "fw-bold"><a href = "/login">Log In with existing account</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validatePassword(){
+            const password = document.getElementById('password').value;
+            const confirmation = document.getElementById('confirmation').value;
+            if (password != confirmation){
+                alert("Error: Passwords do not match!");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+{% endblock %}
