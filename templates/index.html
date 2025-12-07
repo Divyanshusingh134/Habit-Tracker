@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    Home
+
+{% endblock %}
+
+{% block main %}
+
+    <div class = "main-index"  style = "width: 100%; min-height:  100vh; padding-top: 50px;" id = "habit">
+        <div class = "container" data-bs-theme = "dark">
+            <div class = "row justify-content-center">
+                <div class = "col-12">
+                    <div class = "border-0 shadow-sm mb-4 card mt-4">
+                        <div class = "card-body  p-4">
+                            <ul class = "nav nav-pills nav-fill mb-4 rounded-3 gab-1 p-1" id = "pills-tab" role = "tablist">
+                                <li class = "nav-item" role = "presentation">
+                                    <button class = "active  nav-link rounded-3" id = "pills-habit-tab"  data-bs-toggle = "pill" data-bs-target = "#pills-habit" type = "button" >
+                                        <i class = "bi bi-check2-square me-2"></i>My Habit
+                                    </button>
+                                </li>
+                                <li class = "nav-item" role = "presentation">
+                                    <button class = "nav-link rounded-3" id = "pills-schedule-tab" data-bs-toggle = "pill" data-bs-target = "#pills-schedule" type = "button">
+                                        <i class = "bi bi-check2-square me2"></i>Today's Schedule
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class = "tab-content"  id = "pills-tabcontent">
+                                <div class = "tab-pane  fade show active" id = "pills-habit" role = "tabpanel" >
+                                    <h4 class = "habit-header fw-bold text-center justify-content-center">My Habits</h4>
+                                    <div class = "table-responsive">
+                                        <table class = "table table-hover table-striped align-middle">
+                                            <thead class = "table-dark">
+                                                <tr>
+                                                    <th style = "min-width: 150px;">Habit</th>
+                                                    <th style = "min-width: 150px;">Progress</th>
+                                                    <th style = "min-width: 150px;">Goal</th>
+                                                    <th style = "min-width: 150px;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for habit in habits %}
+                                                {% if habit["target"] | int > 0%}
+                                                    {% if habit["current_progress"] | int <= habit["target"] | int %}
+                                                        {% set percent = (habit["current_progress"] | int / habit["target"] | int) * 100%}
+                                                    {% else %}
+                                                        {% set percent = 100 %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% set percent = 0 %}
+                                                {% endif %}
+                                                <tr>
+                                                    <td class = "fw-bold" >{{ habit["habit_name"] }} </td>
+                                                    <td>
+                                                        <div class = "progress" style = "height: 25px;">
+                                                            <div class = "progress-bar bg-success" role = "progres-bar" style = "width: {{ percent }}%" aria-valuenow = "{{ habit['current_progress']}}" aria-valuemin = "0" aria-valuemax = "{{habit['target']}}">{{ percent | round | int }} %</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {{ habit["current_progress"] }} / {{ habit["target"] }} {{ habit["unit"] }}
+                                                    </td>
+                                                    <td>
+                                                        <div class = "align-times center text-center">
+                                                            <form action = "/update" method = "post">
+                                                                <input type = "hidden" name = "habit_id" value = "{{habit.id}}">
+                                                                <button class = "btn btn-primary btn-sm" name = "action" value = "increment" >+1</button>
+                                                                <input type = "hidden" value = "{{habit.id}}"  name = "completed" >
+                                                                <button class = "btn btn-success" name = "action" value = "completed">Completed</button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class = "tab-pane fade show-activity"  id = "pills-schedule" role = "tabpanel" >
+                                    <h4 class = "text-center habit-header fw-bold mb-4">Today’s Timeline</h4>
+
+                                    <div class = "table-responsive" >
+                                        <table class = "table table-hover table-striped align-middle border-secondary text-center">
+                                            <thead class = "table-dark">
+                                                {% if schedule_data %}
+                                                    <tr>
+                                                        <th colspan = "4" >{{ current_day }} </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Task /  Event</th>
+                                                        <th>Start Time</th>
+                                                        <th>End Time </th>
+                                                    </tr>
+                                                {% else %}
+                                                    <tr>
+                                                        <th colspan = "4" class = "fw-bold">No Activity on {{ current_day }}</th>
+                                                    </tr>
+                                                {% endif %}
+                                            </thead>
+                                            <tbody>
+                                                {% if schedule_data %}
+                                                    {% for schedule in schedule_data %}
+                                                        <tr>
+                                                            <th>{{ schedule["activity_name"] }}</th>
+                                                            <th>{{ schedule["start_time" ] }} </th>
+                                                            <th>{{ schedule["end_time"] }} </th>
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                        <tr>
+                                                            <th colspan = "4" class = "fw-bold">  </th>
+                                                        </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
